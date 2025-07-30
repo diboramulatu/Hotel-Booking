@@ -4,7 +4,6 @@ import dao.CustomerDAO;
 import dao.DatabaseInitializer;
 import model.Customer;
 import model.Room;
-// import model
 import java.util.List;
 import dao.RoomDAO;
 import model.SingleRoom;
