@@ -11,5 +11,9 @@ public class ConfigLoader {
         loadConfig();
     }
     
+    private static void loadConfig() {
+    
+    }
+    
 
 }
