@@ -1,5 +1,5 @@
 package model;
-
+// create class
 public class Admin extends User {
     
     public Admin() {
