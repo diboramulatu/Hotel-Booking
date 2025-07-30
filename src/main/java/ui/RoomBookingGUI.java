@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class RoomBookingGUI extends JFrame {
-// private fields
+
     private JComboBox<Room> roomComboBox;
     private JSpinner checkInSpinner;
     private JSpinner checkOutSpinner;
