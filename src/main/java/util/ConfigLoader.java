@@ -13,6 +13,8 @@ public class ConfigLoader {
     
     private static void loadConfig() {
         properties = new Properties();
-        
+        try (InputStream input = new FileInputStream(CONFIG_FILE)) {
+            properties.load(input);
+        } 
     }
 }
