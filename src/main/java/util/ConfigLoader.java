@@ -24,6 +24,6 @@ public class ConfigLoader {
     }
 
     public static String getProperty(String key) {
-        
+        return properties.getProperty(key);
     }
 }
