@@ -30,4 +30,8 @@ public class FileLogger {
     public static void warn(String message) {
         log("WARN", message);
     }
+
+    public static void debug(String message) {
+        
+    }
 }
