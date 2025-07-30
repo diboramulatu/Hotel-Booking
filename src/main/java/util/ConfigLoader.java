@@ -8,7 +8,7 @@ public class ConfigLoader {
     private static Properties properties;
     
     static {
-        
+        loadConfig();
     }
     
 }
