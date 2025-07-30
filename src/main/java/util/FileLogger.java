@@ -12,6 +12,10 @@ public class FileLogger {
         String timestamp = LocalDateTime.now().format(formatter);
         String logEntry = String.format("[%s] %s: %s%n", timestamp, level, message);
         
-        
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.write(logEntry);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
     }
 }
