@@ -6,6 +6,7 @@ import model.Customer;
 import model.Room;
 import java.util.List;
 import dao.RoomDAO;
+// import org .junit.test;
 import model.SingleRoom;
 import model.DoubleRoom;
 public class DatabaseTest {
