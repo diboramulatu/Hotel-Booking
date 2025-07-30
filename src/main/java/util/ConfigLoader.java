@@ -26,4 +26,7 @@ public class ConfigLoader {
         return properties.getProperty(key);
     }
 
+    public static String getProperty(String key, String defaultValue) {
+        
+    }
 }
