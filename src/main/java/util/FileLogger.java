@@ -20,6 +20,6 @@ public class FileLogger {
     }
 
     public static void info(String message) {
-        
+        log("INFO", message);
     }
 }
