@@ -8,4 +8,7 @@ public class FileLogger {
     private static final String LOG_FILE = "log.txt";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
+    public static void log(String level, String message) {
+        
+    }
 }
