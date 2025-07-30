@@ -18,4 +18,8 @@ public class FileLogger {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
     }
+
+    public static void info(String message) {
+        
+    }
 }
