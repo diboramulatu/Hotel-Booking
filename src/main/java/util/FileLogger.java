@@ -28,6 +28,6 @@ public class FileLogger {
     }
 
     public static void warn(String message) {
-        
+        log("WARN", message);
     }
 }
