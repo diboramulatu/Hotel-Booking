@@ -22,4 +22,8 @@ public class FileLogger {
     public static void info(String message) {
         log("INFO", message);
     }
+
+    public static void error(String message) {
+        
+    }
 }
