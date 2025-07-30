@@ -32,6 +32,6 @@ public class FileLogger {
     }
 
     public static void debug(String message) {
-        
+        log("DEBUG", message);
     }
 }
