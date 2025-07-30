@@ -1,5 +1,5 @@
 package model;
-// initiate class Booking
+
 import java.time.LocalDate;
 
 public class Booking {
