@@ -37,3 +37,27 @@ public class RoomService {
             throw new ServiceException("Failed to get room by ID: " + id, e);
       }
     }
+
+    // public boolean isRoomAvailable(int id) throws ServiceException {
+    //     Room room = getRoomById(id);
+    //     return room != null && room.isAvailable(); // requires isAvailable() in Room
+    // }  
+
+    public void markBooked(int id) throws ServiceException {
+        try {
+            roomDAO.updateRoomAvailability(id, false);
+            cache.remove(id); // refresh on next call
+        } catch (Exception e) {
+            throw new ServiceException("Failed to mark room as booked", e);
+        }
+    }
+
+    public void markReleased(int id) throws ServiceException {
+     try {
+            roomDAO.updateRoomAvailability(id, true);
+        } catch (Exception e) {
+            throw new ServiceException("Failed to mark room as released", e);
+        }
+    }
+    
+}
