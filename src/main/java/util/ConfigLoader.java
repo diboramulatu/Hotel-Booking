@@ -12,7 +12,8 @@ public class ConfigLoader {
     }
     
     private static void loadConfig() {
-    
+        properties = new Properties();
+        
     }
     
 
