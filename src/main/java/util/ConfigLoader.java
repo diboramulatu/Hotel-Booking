@@ -22,4 +22,8 @@ public class ConfigLoader {
             properties.setProperty("max.stay.days", "30");
         }
     }
+
+    public static String getProperty(String key) {
+        
+    }
 }
