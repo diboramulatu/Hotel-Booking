@@ -1,5 +1,5 @@
 package model;
-
+// initiate class Room
 public class Room {
     private int roomId;
     private String roomType;
