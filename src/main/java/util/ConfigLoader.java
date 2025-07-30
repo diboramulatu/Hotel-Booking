@@ -28,6 +28,6 @@ public class ConfigLoader {
     }
 
     public static String getProperty(String key, String defaultValue) {
-        
+        return properties.getProperty(key, defaultValue);
     }
 }
