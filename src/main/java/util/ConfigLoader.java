@@ -15,6 +15,11 @@ public class ConfigLoader {
         properties = new Properties();
         try (InputStream input = new FileInputStream(CONFIG_FILE)) {
             properties.load(input);
-        } 
+        } catch (IOException e) {
+            System.err.println("Error loading config file: " + e.getMessage());
+            // Set default values
+            properties.setProperty("db.url", "jdbc:sqlite:hotel.db");
+            properties.setProperty("max.stay.days", "30");
+        }
     }
 }
