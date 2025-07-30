@@ -1,5 +1,5 @@
 package model;
-
+// initiate class Customer
 public class Customer extends User {
     
     public Customer() {
