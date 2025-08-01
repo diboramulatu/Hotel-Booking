@@ -1,14 +1,18 @@
 package ui;
 
+import service.RoomService;
 import dao.RoomDAO;
 import model.Room;
 import model.Booking;
 import service.BookingService;
+import dao.BookingDAO;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 public class RoomBookingGUI extends JFrame {
@@ -20,7 +24,7 @@ public class RoomBookingGUI extends JFrame {
     private JTextField customerIdField;
     private JTextField cancelBookingIdField;
 
-    private BookingService bookingService = new BookingService(new BookingDAO(), new RoomService());
+    private BookingService bookingService = new BookingService(new BookingDAO(), new RoomService(new RoomDAO()));
 
     public RoomBookingGUI() {
         setTitle("Hotel Room Booking");
@@ -31,7 +35,6 @@ public class RoomBookingGUI extends JFrame {
         RoomDAO roomDAO = new RoomDAO();
         LocalDate today = LocalDate.now();
         LocalDate later = today.plusDays(3);
-<<<<<<< Updated upstream
 
         List<Room> availableRooms = roomDAO.getAllAvailableRooms(today, later);
 
@@ -39,9 +42,6 @@ public class RoomBookingGUI extends JFrame {
         add(new JLabel("Customer ID:"));
         customerIdField = new JTextField();
         add(customerIdField);
-=======
-        List<Room> availableRooms = roomDAO.getAllAvailableRooms(today, later);
->>>>>>> Stashed changes
 
         add(new JLabel("Select Room:"));
         roomComboBox = new JComboBox<>(availableRooms.toArray(new Room[0]));
@@ -64,69 +64,67 @@ public class RoomBookingGUI extends JFrame {
         calcButton.addActionListener(e -> calculateTotal());
         add(calcButton);
 
-        // Book Room button
+        // Book button
         JButton bookButton = new JButton("Book Room");
         bookButton.addActionListener(e -> bookRoom());
         add(bookButton);
 
-        // Cancel Booking Section
         add(new JLabel("Booking ID to Cancel:"));
         cancelBookingIdField = new JTextField();
         add(cancelBookingIdField);
 
         JButton cancelButton = new JButton("Cancel Booking");
-        cancelButton.addActionListener(e -> cancelBooking());
+        cancelButton.addActionListener(e -> {
+            String bookingIdText = cancelBookingIdField.getText().trim();
+            if (bookingIdText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a Booking ID to cancel.");
+                return;
+            }
+            try {
+                int bookingId = Integer.parseInt(bookingIdText);
+                int customerId = Integer.parseInt(customerIdField.getText().trim());
+                bookingService.cancelBooking(customerId, bookingId);
+                JOptionPane.showMessageDialog(this, "Booking cancelled successfully.");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Cancellation failed: " + ex.getMessage());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
+        });
         add(cancelButton);
 
         setVisible(true);
     }
 
     private void calculateTotal() {
-        Room selectedRoom = (Room) roomComboBox.getSelectedItem();
-        if (selectedRoom == null) {
-            totalLabel.setText("Select a room");
-            return;
+        try {
+            Date checkInDate = (Date) checkInSpinner.getValue();
+            Date checkOutDate = (Date) checkOutSpinner.getValue();
+            LocalDate in = checkInDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate out = checkOutDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            long days = ChronoUnit.DAYS.between(in, out);
+            Room selectedRoom = (Room) roomComboBox.getSelectedItem();
+            double price = selectedRoom.getPrice() * days;
+            totalLabel.setText(String.format("%.2f", price));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error calculating total: " + e.getMessage());
         }
-
-        LocalDate checkIn = ((java.util.Date) checkInSpinner.getValue()).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-        LocalDate checkOut = ((java.util.Date) checkOutSpinner.getValue()).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-
-        long days = ChronoUnit.DAYS.between(checkIn, checkOut);
-        if (days <= 0) {
-            totalLabel.setText("Invalid dates");
-            return;
-        }
-
-        double totalPrice = selectedRoom.getPrice() * days;
-        totalLabel.setText(String.format("%.2f", totalPrice));
     }
 
     private void bookRoom() {
         try {
-            int customerId = Integer.parseInt(customerIdField.getText());            Room selectedRoom = (Room) roomComboBox.getSelectedItem();
-            LocalDate checkIn = ((java.util.Date) checkInSpinner.getValue()).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-            LocalDate checkOut = ((java.util.Date) checkOutSpinner.getValue()).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            int customerId = Integer.parseInt(customerIdField.getText().trim());
+            Room selectedRoom = (Room) roomComboBox.getSelectedItem();
+            Date checkInDate = (Date) checkInSpinner.getValue();
+            Date checkOutDate = (Date) checkOutSpinner.getValue();
+            LocalDate in = checkInDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate out = checkOutDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-            Booking booking = bookingService.createBooking(customerId, selectedRoom.getRoomId(), checkIn, checkOut);
-            JOptionPane.showMessageDialog(this, "Booking successful! Booking ID: " + booking.getRoomId());
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            Booking booking = bookingService.createBooking(customerId, selectedRoom.getRoomId(), in, out);
+            JOptionPane.showMessageDialog(this, "Booking successful! Booking ID: " + booking.getBookingId());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Booking failed: " + e.getMessage());
         }
-    }
-
-    private void cancelBooking() {
-        try {
-            int bookingId = Integer.parseInt(cancelBookingIdField.getText());
-            bookingService.cancelBooking(customerId, bookingId);
-
-            JOptionPane.showMessageDialog(this, "Booking cancelled successfully.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Cancellation failed: " + ex.getMessage());
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(RoomBookingGUI::new);
     }
 }
