@@ -1,3 +1,5 @@
+package ui;
+
 import dao.RoomDAO;
 import model.Room;
 import model.Booking;
@@ -29,6 +31,7 @@ public class RoomBookingGUI extends JFrame {
         RoomDAO roomDAO = new RoomDAO();
         LocalDate today = LocalDate.now();
         LocalDate later = today.plusDays(3);
+<<<<<<< Updated upstream
 
         List<Room> availableRooms = roomDAO.getAllAvailableRooms(today, later);
 
@@ -36,6 +39,9 @@ public class RoomBookingGUI extends JFrame {
         add(new JLabel("Customer ID:"));
         customerIdField = new JTextField();
         add(customerIdField);
+=======
+        List<Room> availableRooms = roomDAO.getAllAvailableRooms(today, later);
+>>>>>>> Stashed changes
 
         add(new JLabel("Select Room:"));
         roomComboBox = new JComboBox<>(availableRooms.toArray(new Room[0]));
