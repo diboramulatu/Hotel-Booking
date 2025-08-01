@@ -5,3 +5,4 @@ public class InvalidBookingException extends Exception {
         super(message);
     }
 }
+
