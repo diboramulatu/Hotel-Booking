@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 public class RoomService {
     private final RoomDAO roomDAO;
+    // Cache to store rooms keyed by room ID for quick lookup and reduced DB calls
     private final Map<Integer, Room> cache = new HashMap<>();
 
     public RoomService(RoomDAO roomDAO) {
