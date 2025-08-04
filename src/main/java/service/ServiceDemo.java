@@ -8,11 +8,7 @@ import model.Booking;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public class ServiceDemo {
-    public static void main(String[] args) {
-        RoomService roomService = new RoomService(new RoomDAO());
-        BookingService bookingService = new BookingService(new BookingDAO(), roomService);
-        Scanner sc = new Scanner(System.in);
+
 
         try {
             System.out.print("Enter customer ID: ");
