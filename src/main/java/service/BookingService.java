@@ -38,6 +38,7 @@ public class BookingService {
         }
 
         try {
+             //Successfully handles booking creation and logs activity
             Booking booking = new Booking(customerId, roomId, checkIn, checkOut);
             bookingDAO.addBooking(booking);
             FileLogger.info("Booking created: CustomerID = " + customerId + ", RoomID = " + roomId + ", CheckIn = " + checkIn + ", CheckOut = " + checkOut);
