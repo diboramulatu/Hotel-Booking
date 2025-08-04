@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 public class RoomService {
     private final RoomDAO roomDAO;
+    // Cache to store rooms keyed by room ID for quick lookup and reduced DB calls
     private final Map<Integer, Room> cache = new HashMap<>();
 
     public RoomService(RoomDAO roomDAO) {
@@ -20,7 +21,8 @@ public class RoomService {
     public List<Room> getAvailableRooms(LocalDate checkIn , LocalDate checkOut) throws ServiceException {
         try {
             List<Room> rooms = roomDAO.getAllAvailableRooms(checkIn, checkOut);
-            cache.clear();
+            cache.clear(); // Clear cache to avoid stale data before repopulating with fresh available rooms
+
             for (Room r : rooms) {
                 cache.put(r.getRoomId(), r); // assumes Room has getRoomId()
             }
@@ -46,7 +48,7 @@ public class RoomService {
     public void markBooked(int id) throws ServiceException {
         try {
             roomDAO.updateRoomAvailability(id, false);
-            cache.remove(id); // refresh on next call
+            cache.remove(id); // Remove room from cache to force refresh on next access after booking
         } catch (Exception e) {
             throw new ServiceException("Failed to mark room as booked", e);
         }

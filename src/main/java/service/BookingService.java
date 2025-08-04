@@ -5,9 +5,9 @@ import exception.*;
 import model.Booking;
 
 import service.RoomService;
-import service.BookingService;
 import java.time.LocalDate;
 import java.util.List;
+import util.FileLogger;
 
 import service.validation.InputValidator;
 import service.rules.BookingRules;
@@ -25,6 +25,7 @@ public class BookingService {
         throws InvalidBookingException, RoomUnavailableException, ServiceException {
 
         try {
+            //Input validation logic for customer and room ID, and date rules
             InputValidator.requirePositiveId(customerId, "Customer ID");
             InputValidator.requirePositiveId(roomId, "Room ID");
             BookingRules.ensureValidDates(checkIn, checkOut);
@@ -32,18 +33,17 @@ public class BookingService {
             throw new InvalidBookingException(e.getMessage());
         }
 
-    // Check room availability
-        if (!bookingDAO.isRoomAvailable(roomId,checkIn, checkOut)) {
+        if (!bookingDAO.isRoomAvailable(roomId, checkIn, checkOut)) {
             throw new RoomUnavailableException("Room " + roomId + " is not available.");
         }
 
         try {
+             //Successfully handles booking creation and logs activity
             Booking booking = new Booking(customerId, roomId, checkIn, checkOut);
             bookingDAO.addBooking(booking);
-            //roomService.markBooked(roomId);
+            FileLogger.info("Booking created: CustomerID = " + customerId + ", RoomID = " + roomId + ", CheckIn = " + checkIn + ", CheckOut = " + checkOut);
             return booking;
         } catch (Exception e) {
-            //roomService.markReleased(roomId); // rollback
             throw new ServiceException("Failed to create booking.", e);
         }
     }
@@ -55,6 +55,7 @@ public class BookingService {
 
             bookingDAO.cancelBooking(bookingId);
             roomService.markReleased(roomId);
+            FileLogger.info("Booking cancelled: BookingID = " + bookingId + ", RoomID = " + roomId);
         } catch (Exception e) {
             throw new ServiceException("Failed to cancel booking.", e);
         }
@@ -77,6 +78,4 @@ public class BookingService {
 
         return booking.calculateCost(dailyRate);
     }
-
-    
 }
