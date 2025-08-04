@@ -48,7 +48,7 @@ public class RoomService {
     public void markBooked(int id) throws ServiceException {
         try {
             roomDAO.updateRoomAvailability(id, false);
-            cache.remove(id); // refresh on next call
+            cache.remove(id); // Remove room from cache to force refresh on next access after booking
         } catch (Exception e) {
             throw new ServiceException("Failed to mark room as booked", e);
         }
