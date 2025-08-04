@@ -21,7 +21,8 @@ public class RoomService {
     public List<Room> getAvailableRooms(LocalDate checkIn , LocalDate checkOut) throws ServiceException {
         try {
             List<Room> rooms = roomDAO.getAllAvailableRooms(checkIn, checkOut);
-            cache.clear();
+            cache.clear(); // Clear cache to avoid stale data before repopulating with fresh available rooms
+
             for (Room r : rooms) {
                 cache.put(r.getRoomId(), r); // assumes Room has getRoomId()
             }
