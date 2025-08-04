@@ -25,6 +25,7 @@ public class BookingService {
         throws InvalidBookingException, RoomUnavailableException, ServiceException {
 
         try {
+            //Input validation logic for customer and room ID, and date rules
             InputValidator.requirePositiveId(customerId, "Customer ID");
             InputValidator.requirePositiveId(roomId, "Room ID");
             BookingRules.ensureValidDates(checkIn, checkOut);
